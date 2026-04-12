@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import os
 
 app = Flask(__name__)
 
-# Função para conectar ao banco e criar a tabela se não existir
 def init_db():
     conn = sqlite3.connect('oficina.db')
     cursor = conn.cursor()
@@ -21,10 +20,16 @@ def init_db():
 
 @app.route('/')
 def home():
-    # Esta parte busca os dados no banco para mostrar no site
+    search = request.args.get('search')
     conn = sqlite3.connect('oficina.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM veiculos')
+    
+    if search:
+        # Busca por nome ou placa
+        cursor.execute("SELECT * FROM veiculos WHERE nome LIKE ? OR placa LIKE ?", (f'%{search}%', f'%{search}%'))
+    else:
+        cursor.execute('SELECT * FROM veiculos')
+        
     dados = cursor.fetchall()
     conn.close()
     return render_template('index.html', veiculos=dados)
@@ -34,20 +39,23 @@ def cadastrar():
     nome = request.form.get('nome')
     modelo = request.form.get('modelo')
     placa = request.form.get('placa')
-
-    # Salva no arquivo do banco de dados
     conn = sqlite3.connect('oficina.db')
     cursor = conn.cursor()
     cursor.execute('INSERT INTO veiculos (nome, modelo, placa) VALUES (?, ?, ?)', (nome, modelo, placa))
     conn.commit()
     conn.close()
-    
     return redirect('/')
 
-# Bloco final único e corrigido para o Render
+@app.route('/excluir/<int:id>')
+def excluir(id):
+    conn = sqlite3.connect('oficina.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM veiculos WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect('/')
+
 if __name__ == "__main__":
-    init_db()  # Garante que o banco de dados exista antes de abrir o site
-    # Pega a porta configurada no Render (10000) ou usa 5000 se rodar no seu PC
+    init_db()
     port = int(os.environ.get("PORT", 5000))
-    # host="0.0.0.0" é o que permite que o site seja acessado pela internet
     app.run(host="0.0.0.0", port=port)
