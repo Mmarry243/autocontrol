@@ -2,84 +2,60 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoControl - Oficina</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        
-        /* Estilo do Formulário */
-        form { display: grid; gap: 10px; margin-bottom: 30px; background: #ebf5fb; padding: 20px; border-radius: 8px; }
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
-        button { padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button:hover { background-color: #2980b9; }
-
-        /* Barra de Busca */
-        .search-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .search-container input { flex-grow: 1; }
-        .btn-search { background-color: #27ae60; }
-
-        /* Tabela */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background-color: #34495e; color: white; }
-        tr:hover { background-color: #f9f9f9; }
-
-        /* Botão Excluir */
-        .btn-delete { color: #e74c3c; text-decoration: none; font-weight: bold; padding: 5px 10px; border: 1px solid #e74c3c; border-radius: 4px; transition: 0.3s; }
-        .btn-delete:hover { background-color: #e74c3c; color: white; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
+        h1, h3 { text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn-search { background-color: #007bff; margin-bottom: 20px; }
+        .btn-delete { color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px; border: 1px solid #dc3545; padding: 2px 5px; border-radius: 3px; }
+        .btn-delete:hover { background: #dc3545; color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f8f9fa; }
     </style>
 </head>
 <body>
+    <div class="card">
+        <h1>🏎️ AutoControl</h1>
+        
+        <h3>Cadastro de Veículo</h3>
+        <form action="/cadastrar" method="POST">
+            <input type="text" name="nome" placeholder="Nome do Cliente" required>
+            <input type="text" name="modelo" placeholder="Modelo do Carro" required>
+            <input type="text" name="placa" placeholder="Placa do Veículo" required>
+            <button type="submit">Salvar no Sistema</button>
+        </form>
 
-<div class="container">
-    <h1>🛠️ AutoControl - Gestão de Oficina</h1>
+        <hr>
 
-    <h3>Novo Cadastro</h3>
-    <form action="/cadastrar" method="POST">
-        <input type="text" name="nome" placeholder="Nome do Cliente" required>
-        <input type="text" name="modelo" placeholder="Modelo do Veículo (ex: Fiat Uno)" required>
-        <input type="text" name="placa" placeholder="Placa do Veículo" required>
-        <button type="submit">Cadastrar Veículo</button>
-    </form>
+        <h3>Buscar Veículo</h3>
+        <form action="/" method="GET">
+            <input type="text" name="search" placeholder="Buscar por nome ou placa...">
+            <button type="submit" class="btn-search">🔍 Pesquisar</button>
+        </form>
 
-    <hr>
-
-    <h3>Lista de Veículos</h3>
-    <form action="/" method="GET" class="search-container">
-        <input type="text" name="search" placeholder="Buscar por cliente ou placa...">
-        <button type="submit" class="btn-search">🔍 Buscar</button>
-        <a href="/" style="text-decoration: none; padding: 10px; color: #7f8c8d;">Limpar</a>
-    </form>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Cliente</th>
-                <th>Modelo</th>
-                <th>Placa</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for veiculo in veiculos %}
-            <tr>
-                <td>{{ veiculo[1] }}</td>
-                <td>{{ veiculo[2] }}</td>
-                <td>{{ veiculo[3] }}</td>
-                <td>
-                    <a href="/excluir/{{ veiculo[0] }}" class="btn-delete" onclick="return confirm('Deseja excluir este registro?')">Excluir</a>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4" style="text-align: center; color: #95a5a6;">Nenhum veículo encontrado.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
+        <h3>Veículos Cadastrados</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente/Carro</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for veiculo in veiculos %}
+                <tr>
+                    <td><strong>{{ veiculo[1] }}</strong> - {{ veiculo[2] }} ({{ veiculo[3] }})</td>
+                    <td>
+                        <a href="/excluir/{{ veiculo[0] }}" class="btn-delete" onclick="return confirm('Excluir este registro?')">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
