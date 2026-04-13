@@ -23,22 +23,17 @@ def home():
     search = request.args.get('search')
     conn = sqlite3.connect('oficina.db')
     cursor = conn.cursor()
-    
     if search:
-        # Busca por nome ou placa
         cursor.execute("SELECT * FROM veiculos WHERE nome LIKE ? OR placa LIKE ?", (f'%{search}%', f'%{search}%'))
     else:
         cursor.execute('SELECT * FROM veiculos')
-        
     dados = cursor.fetchall()
     conn.close()
     return render_template('index.html', veiculos=dados)
 
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
-    nome = request.form.get('nome')
-    modelo = request.form.get('modelo')
-    placa = request.form.get('placa')
+    nome, modelo, placa = request.form.get('nome'), request.form.get('modelo'), request.form.get('placa')
     conn = sqlite3.connect('oficina.db')
     cursor = conn.cursor()
     cursor.execute('INSERT INTO veiculos (nome, modelo, placa) VALUES (?, ?, ?)', (nome, modelo, placa))
