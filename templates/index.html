@@ -5,33 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoControl - Oficina</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 350px; }
-        h1 { color: #333; margin-bottom: 1.5rem; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        button:hover { background-color: #218838; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        
+        /* Estilo do Formulário */
+        form { display: grid; gap: 10px; margin-bottom: 30px; background: #ebf5fb; padding: 20px; border-radius: 8px; }
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        button { padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #2980b9; }
+
+        /* Barra de Busca */
+        .search-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-container input { flex-grow: 1; }
+        .btn-search { background-color: #27ae60; }
+
+        /* Tabela */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #34495e; color: white; }
+        tr:hover { background-color: #f9f9f9; }
+
+        /* Botão Excluir */
+        .btn-delete { color: #e74c3c; text-decoration: none; font-weight: bold; padding: 5px 10px; border: 1px solid #e74c3c; border-radius: 4px; transition: 0.3s; }
+        .btn-delete:hover { background-color: #e74c3c; color: white; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>🏎️ AutoControl</h1>
-        <h3>Cadastro de Veículo</h3>
-        <form action="/cadastrar" method="POST">
-            <input type="text" name="nome" placeholder="Nome do Cliente" required>
-            <input type="text" name="modelo" placeholder="Modelo do Carro" required>
-            <input type="text" name="placa" placeholder="Placa do Veículo" required>
-            <button type="submit">Salvar no Sistema</button>
-        </form>
-        <hr>
-<h3>Veículos Cadastrados</h3>
-<ul style="text-align: left; list-style: none; padding: 0;">
-    {% for v in veiculos %}
-    <li style="background: #eee; margin: 5px 0; padding: 8px; border-radius: 4px;">
-        <strong>{{ v[2] }}</strong> - {{ v[1] }} ({{ v[3] }})
-    </li>
-    {% endfor %}
-</ul>
-    </div>
+
+<div class="container">
+    <h1>🛠️ AutoControl - Gestão de Oficina</h1>
+
+    <h3>Novo Cadastro</h3>
+    <form action="/cadastrar" method="POST">
+        <input type="text" name="nome" placeholder="Nome do Cliente" required>
+        <input type="text" name="modelo" placeholder="Modelo do Veículo (ex: Fiat Uno)" required>
+        <input type="text" name="placa" placeholder="Placa do Veículo" required>
+        <button type="submit">Cadastrar Veículo</button>
+    </form>
+
+    <hr>
+
+    <h3>Lista de Veículos</h3>
+    <form action="/" method="GET" class="search-container">
+        <input type="text" name="search" placeholder="Buscar por cliente ou placa...">
+        <button type="submit" class="btn-search">🔍 Buscar</button>
+        <a href="/" style="text-decoration: none; padding: 10px; color: #7f8c8d;">Limpar</a>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Modelo</th>
+                <th>Placa</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for veiculo in veiculos %}
+            <tr>
+                <td>{{ veiculo[1] }}</td>
+                <td>{{ veiculo[2] }}</td>
+                <td>{{ veiculo[3] }}</td>
+                <td>
+                    <a href="/excluir/{{ veiculo[0] }}" class="btn-delete" onclick="return confirm('Deseja excluir este registro?')">Excluir</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: #95a5a6;">Nenhum veículo encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
