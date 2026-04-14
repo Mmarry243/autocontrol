@@ -2,60 +2,192 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>AutoControl - Oficina</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoControl - Pro Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
-        h1, h3 { text-align: center; color: #333; }
-        input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        .btn-search { background-color: #007bff; margin-bottom: 20px; }
-        .btn-delete { color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px; border: 1px solid #dc3545; padding: 2px 5px; border-radius: 3px; }
-        .btn-delete:hover { background: #dc3545; color: white; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: #f8f9fa; }
+        :root {
+            --primary: #2ecc71;
+            --secondary: #3498db;
+            --danger: #e74c3c;
+            --dark: #1a1a2e;
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background-attachment: fixed;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--glass);
+            width: 100%;
+            max-width: 700px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .header p { color: #666; margin-top: 5px; }
+
+        .form-group { margin-bottom: 15px; }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-save { background: var(--primary); color: white; }
+        .btn-search { background: var(--secondary); color: white; margin-top: 10px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        .search-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .list-section { margin-top: 30px; }
+
+        .car-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--secondary);
+            transition: 0.3s;
+        }
+
+        .car-card:hover { background: #fff; box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+
+        .car-info b { display: block; font-size: 1.1rem; color: #222; }
+        .car-info span { font-size: 0.9rem; color: #777; }
+
+        .badge-placa {
+            background: #333;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .btn-delete {
+            color: var(--danger);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 8px;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .btn-delete:hover { background: rgba(231, 76, 60, 0.1); }
+
+        .empty-msg { text-align: center; color: #999; padding: 20px; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>🏎️ AutoControl</h1>
-        
-        <h3>Cadastro de Veículo</h3>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-car-side"></i> AutoControl</h1>
+            <p>Gestão Profissional de Oficina</p>
+        </div>
+
         <form action="/cadastrar" method="POST">
-            <input type="text" name="nome" placeholder="Nome do Cliente" required>
-            <input type="text" name="modelo" placeholder="Modelo do Carro" required>
-            <input type="text" name="placa" placeholder="Placa do Veículo" required>
-            <button type="submit">Salvar no Sistema</button>
+            <div class="form-group">
+                <input type="text" name="nome" placeholder="👤 Nome do Cliente" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="modelo" placeholder="🚘 Modelo do Carro" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="placa" placeholder="🔢 Placa do Veículo" required>
+            </div>
+            <button type="submit" class="btn btn-save">
+                <i class="fas fa-plus-circle"></i> Cadastrar Entrada
+            </button>
         </form>
 
-        <hr>
+        <div class="search-section">
+            <form action="/" method="GET" style="display: flex; gap: 10px;">
+                <input type="text" name="search" placeholder="Pesquisar por nome ou placa...">
+                <button type="submit" class="btn btn-search" style="width: auto; padding: 0 20px;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
 
-        <h3>Buscar Veículo</h3>
-        <form action="/" method="GET">
-            <input type="text" name="search" placeholder="Buscar por nome ou placa...">
-            <button type="submit" class="btn-search">🔍 Pesquisar</button>
-        </form>
-
-        <h3>Veículos Cadastrados</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Cliente/Carro</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="list-section">
+            <h3 style="margin-bottom: 15px;"><i class="fas fa-list"></i> Veículos no Pátio</h3>
+            
+            {% if veiculos %}
                 {% for veiculo in veiculos %}
-                <tr>
-                    <td><strong>{{ veiculo[1] }}</strong> - {{ veiculo[2] }} ({{ veiculo[3] }})</td>
-                    <td>
-                        <a href="/excluir/{{ veiculo[0] }}" class="btn-delete" onclick="return confirm('Excluir este registro?')">Excluir</a>
-                    </td>
-                </tr>
+                <div class="car-card">
+                    <div class="car-info">
+                        <b>{{ veiculo[1] }}</b>
+                        <span>{{ veiculo[2] }} • <span class="badge-placa">{{ veiculo[3] }}</span></span>
+                    </div>
+                    <a href="/excluir/{{ veiculo[0] }}" class="btn-delete" title="Remover Saída" onclick="return confirm('Confirmar saída deste veículo?')">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
                 {% endfor %}
-            </tbody>
-        </table>
+            {% else %}
+                <div class="empty-msg">
+                    <i class="fas fa-info-circle"></i> Nenhum veículo encontrado no pátio.
+                </div>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
