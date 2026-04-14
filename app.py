@@ -29,14 +29,16 @@ def home():
     conn = get_db_connection()
     
     if search:
-        # Busca inteligente: funciona para Nome, Modelo ou Placa
+        # Busca em Nome, Modelo ou Placa
         query = "SELECT * FROM veiculos WHERE nome LIKE ? OR modelo LIKE ? OR placa LIKE ?"
         veiculos = conn.execute(query, (f'%{search}%', f'%{search}%', f'%{search}%')).fetchall()
     else:
+        # Se não pesquisou nada, MOSTRA TUDO
         veiculos = conn.execute('SELECT * FROM veiculos').fetchall()
     
     conn.close()
-    return render_template('index.html', veiculos=veiculos)
+    # Importante: passamos o termo de busca de volta para o HTML
+    return render_template('index.html', veiculos=veiculos, last_search=search)
 
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
