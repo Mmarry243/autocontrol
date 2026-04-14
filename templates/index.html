@@ -11,174 +11,236 @@
             --secondary: #3498db;
             --danger: #e74c3c;
             --dark: #1a1a2e;
-            --glass: rgba(255, 255, 255, 0.95);
+            /* Um branco com mais transparência para o efeito de vidro */
+            --glass: rgba(255, 255, 255, 0.75); 
+            --text-on-glass: #222;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            /* IMAGEM DE FUNDO TOP: Oficina Mecânica Profissional */
+            background-image: url('https://images.unsplash.com/photo-1517026575980-3e1e2dedeab4?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
             background-attachment: fixed;
-            color: #333;
+            background-repeat: no-repeat;
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center; /* Centraliza verticalmente também */
             min-height: 100vh;
             padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Camada escura sobre a imagem para dar mais contraste */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Escurece o fundo */
+            z-index: -1;
         }
 
         .container {
             background: var(--glass);
             width: 100%;
-            max-width: 700px;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
+            max-width: 650px;
+            padding: 50px; /* Aumentei o padding */
+            border-radius: 25px; /* Bordas mais arredondadas */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); /* Sombra mais forte */
+            backdrop-filter: blur(15px); /* Efeito de vidro jateado mais forte */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borda fina e clara */
+            color: var(--text-on-glass);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .header h1 {
             color: var(--dark);
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
-        .header p { color: #666; margin-top: 5px; }
+        .header p { color: #444; margin-top: 8px; font-size: 1.1rem; }
 
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 20px; position: relative;}
+        
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 1.1rem;
+        }
 
         input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 1rem;
+            padding: 15px 15px 15px 45px; /* Padding esquerdo para o ícone */
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            font-size: 1.05rem;
             transition: all 0.3s;
             box-sizing: border-box;
+            background-color: rgba(255,255,255,0.8);
         }
 
         input:focus {
             border-color: var(--secondary);
             outline: none;
-            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.4);
+            background-color: #fff;
         }
 
         .btn {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            text-transform: uppercase; /* Texto em maiúsculo */
+            letter-spacing: 1px;
         }
 
         .btn-save { background: var(--primary); color: white; }
-        .btn-search { background: var(--secondary); color: white; margin-top: 10px; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-search { background: var(--secondary); color: white; margin-top: 15px; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .btn:active { transform: translateY(-1px); }
 
         .search-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(0,0,0,0.1);
         }
 
-        .list-section { margin-top: 30px; }
+        .list-section { margin-top: 40px; }
+
+        .list-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+        }
 
         .car-card {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 5px solid var(--secondary);
-            transition: 0.3s;
+            border-left: 6px solid var(--secondary);
+            transition: all 0.3s;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            border-right: 1px solid rgba(255,255,255,0.3);
         }
 
-        .car-card:hover { background: #fff; box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+        .car-card:hover { background: rgba(255, 255, 255, 0.9); transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        .car-info b { display: block; font-size: 1.1rem; color: #222; }
-        .car-info span { font-size: 0.9rem; color: #777; }
+        .car-info b { display: block; font-size: 1.2rem; color: #111; margin-bottom: 4px; }
+        .car-info span { font-size: 0.95rem; color: #555; display: flex; align-items: center; gap: 8px;}
 
         .badge-placa {
-            background: #333;
+            background: #222;
             color: #fff;
-            padding: 3px 8px;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 0.9rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .btn-delete {
             color: var(--danger);
             text-decoration: none;
-            font-size: 1.2rem;
-            padding: 8px;
+            font-size: 1.4rem;
+            padding: 10px;
             border-radius: 50%;
-            transition: 0.3s;
+            transition: all 0.3s;
+            background-color: rgba(231, 76, 60, 0.1);
         }
 
-        .btn-delete:hover { background: rgba(231, 76, 60, 0.1); }
+        .btn-delete:hover { background-color: rgba(231, 76, 60, 0.2); transform: scale(1.1); }
 
-        .empty-msg { text-align: center; color: #999; padding: 20px; }
+        .empty-msg { text-align: center; color: #777; padding: 30px; font-size: 1.1rem; border: 2px dashed rgba(0,0,0,0.1); border-radius: 15px;}
+        
+        /* Ajuste para telas menores */
+        @media (max-width: 600px) {
+            .container { padding: 30px 20px; }
+            .header h1 { font-size: 2.2rem; }
+            .car-card { flex-direction: column; text-align: center; gap: 15px; }
+            .btn-delete { width: 100%; border-radius: 10px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-car-side"></i> AutoControl</h1>
+            <h1><i class="fas fa-wrench"></i> AutoControl</h1>
             <p>Gestão Profissional de Oficina</p>
         </div>
 
         <form action="/cadastrar" method="POST">
             <div class="form-group">
-                <input type="text" name="nome" placeholder="👤 Nome do Cliente" required>
+                <i class="fas fa-user"></i>
+                <input type="text" name="nome" placeholder="Nome do Cliente" required>
             </div>
             <div class="form-group">
-                <input type="text" name="modelo" placeholder="🚘 Modelo do Carro" required>
+                <i class="fas fa-car"></i>
+                <input type="text" name="modelo" placeholder="Modelo do Carro" required>
             </div>
             <div class="form-group">
-                <input type="text" name="placa" placeholder="🔢 Placa do Veículo" required>
+                <i class="fas fa-id-card"></i>
+                <input type="text" name="placa" placeholder="Placa do Veículo" required>
             </div>
             <button type="submit" class="btn btn-save">
-                <i class="fas fa-plus-circle"></i> Cadastrar Entrada
+                <i class="fas fa-file-import"></i> Cadastrar Entrada
             </button>
         </form>
 
         <div class="search-section">
-            <form action="/" method="GET" style="display: flex; gap: 10px;">
-                <input type="text" name="search" placeholder="Pesquisar por nome ou placa...">
-                <button type="submit" class="btn btn-search" style="width: auto; padding: 0 20px;">
+            <form action="/" method="GET" style="display: flex; gap: 12px;">
+                <input type="text" name="search" placeholder="Pesquisar por nome ou placa..." style="flex-grow: 1;">
+                <button type="submit" class="btn btn-search" style="width: auto; padding: 0 25px; margin-top: 0;">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
         </div>
 
         <div class="list-section">
-            <h3 style="margin-bottom: 15px;"><i class="fas fa-list"></i> Veículos </h3>
+            <h3><i class="fas fa-car-crash"></i> Veículos no Pátio</h3>
             
             {% if veiculos %}
                 {% for veiculo in veiculos %}
                 <div class="car-card">
                     <div class="car-info">
                         <b>{{ veiculo[1] }}</b>
-                        <span>{{ veiculo[2] }} • <span class="badge-placa">{{ veiculo[3] }}</span></span>
+                        <span><i class="fas fa-car"></i> {{ veiculo[2] }} • <span class="badge-placa">{{ veiculo[3] }}</span></span>
                     </div>
-                    <a href="/excluir/{{ veiculo[0] }}" class="btn-delete" title="Remover Saída" onclick="return confirm('Confirmar saída deste veículo?')">
-                        <i class="fas fa-trash-alt"></i>
+                    <a href="/excluir/{{ veiculo[0] }}" class="btn-delete" title="Confirmar Saída" onclick="return confirm('Confirmar saída deste veículo do pátio?')">
+                        <i class="fas fa-door-open"></i>
                     </a>
                 </div>
                 {% endfor %}
