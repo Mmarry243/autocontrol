@@ -4,15 +4,16 @@ import os
 
 app = Flask(__name__)
 
-# Função para conectar ao banco de forma segura
-def get_db_connection():
-    conn = sqlite3.connect('oficina.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+# Função criada pelo aluno para conectar ao banco
+def abrir_conexao():
+    conexao = sqlite3.connect('oficina.db')
+    conexao.row_factory = sqlite3.Row
+    return conexao
 
-def init_db():
-    conn = get_db_connection()
-    conn.execute('''
+# Função para criar as tabelas da oficina
+def iniciar_oficina():
+    conexao = abrir_conexao()
+    conexao.execute('''
         CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
@@ -20,53 +21,54 @@ def init_db():
             placa TEXT NOT NULL
         )
     ''')
-    conn.commit()
-    conn.close()
+    conexao.commit()
+    conexao.close()
 
 @app.route('/')
 def home():
-    search = request.args.get('search', '').strip()
-    conn = get_db_connection()
+    # Variável 'pesquisa' em português
+    pesquisa = request.args.get('search', '').strip()
+    conexao = abrir_conexao()
     
-    if search:
-        # Busca em Nome, Modelo ou Placa
-        query = "SELECT * FROM veiculos WHERE nome LIKE ? OR modelo LIKE ? OR placa LIKE ?"
-        veiculos = conn.execute(query, (f'%{search}%', f'%{search}%', f'%{search}%')).fetchall()
+    if pesquisa:
+        # Comando para filtrar nome, modelo ou placa
+        comando_sql = "SELECT * FROM veiculos WHERE nome LIKE ? OR modelo LIKE ? OR placa LIKE ?"
+        lista_carros = conexao.execute(comando_sql, (f'%{pesquisa}%', f'%{pesquisa}%', f'%{pesquisa}%')).fetchall()
     else:
-        # Se não pesquisou nada, MOSTRA TUDO
-        veiculos = conn.execute('SELECT * FROM veiculos').fetchall()
+        # Pega todos os carros se não tiver busca
+        lista_carros = conexao.execute('SELECT * FROM veiculos').fetchall()
     
-    conn.close()
-    # Importante: passamos o termo de busca de volta para o HTML
-    return render_template('index.html', veiculos=veiculos, last_search=search)
+    conexao.close()
+    # Enviando 'busca_cliente' para o HTML
+    return render_template('index.html', veiculos=lista_carros, busca_cliente=pesquisa)
 
 @app.route('/cadastrar', methods=['POST'])
-def cadastrar():
+def salvar_veiculo():
     nome = request.form.get('nome')
     modelo = request.form.get('modelo')
     placa = request.form.get('placa')
     
     if nome and modelo and placa:
-        conn = get_db_connection()
-        conn.execute('INSERT INTO veiculos (nome, modelo, placa) VALUES (?, ?, ?)', (nome, modelo, placa))
-        conn.commit()
-        conn.close()
+        conexao = abrir_conexao()
+        conexao.execute('INSERT INTO veiculos (nome, modelo, placa) VALUES (?, ?, ?)', (nome, modelo, placa))
+        conexao.commit()
+        conexao.close()
     
     return redirect(url_for('home'))
 
 @app.route('/excluir/<int:id>')
-def excluir(id):
+def remover_carro(id):
     try:
-        conn = get_db_connection()
-        conn.execute('DELETE FROM veiculos WHERE id = ?', (id,))
-        conn.commit()
-        conn.close()
-    except Exception as e:
-        print(f"Erro ao excluir: {e}")
+        conexao = abrir_conexao()
+        conexao.execute('DELETE FROM veiculos WHERE id = ?', (id,))
+        conexao.commit()
+        conexao.close()
+    except Exception as erro:
+        print(f"Erro ao remover no sistema: {erro}")
     
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
-    init_db()
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    iniciar_oficina()
+    porta = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=porta)
