@@ -4,28 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoControl - Painel de Gestão</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; display: flex; flex-direction: column; height: 100vh; }
-        header { background: #2c3e50; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .main-content { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
-        .sidebar { flex: 1; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); max-width: 350px; }
-        .content-area { flex: 2; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
-        h2 { font-size: 1.2rem; color: #333; margin-top: 0; border-bottom: 2px solid #f4f7f6; padding-bottom: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .btn { cursor: pointer; border: none; border-radius: 5px; padding: 10px 15px; font-weight: bold; transition: 0.2s; }
+        /* Configurações Gerais da Página */
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #f4f7f6; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+        }
+
+        /* Topo do Site */
+        header { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 15px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        /* Área Principal */
+        .main-content { 
+            display: flex; 
+            flex: 1; 
+            padding: 20px; 
+            gap: 20px; 
+            overflow: hidden; 
+        }
+
+        /* Lado Esquerdo - Caixa de Cadastro */
+        .sidebar { 
+            flex: 1; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            max-width: 350px; 
+        }
+
+        /* Lado Direito - Lista de Veículos */
+        .content-area { 
+            flex: 2; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        h2 { 
+            font-size: 1.2rem; 
+            color: #333; 
+            margin-top: 0; 
+            border-bottom: 2px solid #f4f7f6; 
+            padding-bottom: 10px; 
+        }
+
+        /* Estilo dos Campos do Formulário */
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-size: 0.9rem; 
+            color: #666; 
+        }
+
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+        }
+
+        /* Estilo dos Botões */
+        .btn { 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 5px; 
+            padding: 10px 15px; 
+            font-weight: bold; 
+            transition: 0.2s; 
+        }
+
         .btn-add { background: #27ae60; color: white; width: 100%; }
         .btn-search { background: #3498db; color: white; }
-        .btn-clear { background: #95a5a6; color: white; text-decoration: none; font-size: 0.8rem; padding: 5px 10px; border-radius: 5px; }
-        .search-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-        .scroll-area { flex: 1; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; background: #f8f9fa; padding: 12px; font-size: 0.9rem; color: #777; }
-        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        .plate { background: #333; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-        .btn-delete { color: #e74c3c; text-decoration: none; font-size: 1.2rem; }
+        .btn-clear { 
+            background: #95a5a6; 
+            color: white; 
+            text-decoration: none; 
+            font-size: 0.8rem; 
+            padding: 5px 10px; 
+            border-radius: 5px; 
+        }
+
+        /* Barra de Pesquisa */
+        .search-bar { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+        }
+
+        .scroll-area { 
+            flex: 1; 
+            overflow-y: auto; 
+        }
+
+        /* Tabela de Dados */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+
+        th { 
+            text-align: left; 
+            background: #f8f9fa; 
+            padding: 12px; 
+            font-size: 0.9rem; 
+            color: #777; 
+        }
+
+        td { 
+            padding: 12px; 
+            border-bottom: 1px solid #eee; 
+            font-size: 0.9rem; 
+        }
+
+        /* Estilo da Placa do Carro */
+        .plate { 
+            background: #333; 
+            color: white; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-family: monospace; 
+        }
+
+        .btn-delete { 
+            color: #e74c3c; 
+            text-decoration: none; 
+            font-size: 1.2rem; 
+        }
     </style>
 </head>
 <body>
@@ -36,6 +163,7 @@
 </header>
 
 <div class="main-content">
+    
     <div class="sidebar">
         <h2><i class="fas fa-edit"></i> Novo Registro</h2>
         <form action="/cadastrar" method="POST">
